@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: learnly-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/learnly}
+    username: ${DB_USER:learnly}
+    password: ${DB_PASSWORD:learnly}
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      continue-on-error: false
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none              # schema.sql owns the schema
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc.time_zone: UTC
+    open-in-view: false
+  jackson:
+    default-property-inclusion: non_null
+
+learnly:
+  jwt:
+    # 256-bit base64 secret. CHANGE IN PRODUCTION.
+    secret: ${JWT_SECRET:bGVhcm5seS1zdXBlci1zZWNyZXQta2V5LWNoYW5nZS1pbi1wcm9kdWN0aW9uLTIwMjU=}
+    access-token-ttl-min: 30
+    refresh-token-ttl-days: 14
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:3000}
+  ai:
+    # Anthropic API key for AI assistant. Leave blank to use stub responses.
+    anthropic-api-key: ${ANTHROPIC_API_KEY:}
+    model: claude-sonnet-4-5
+
+logging:
+  level:
+    org.springframework.security: INFO
+    com.learnly: DEBUG
